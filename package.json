@@ -22,7 +22,7 @@
       "editor/context": [
         {
           "when": "editorHasSelection",
-          "command": "ai-commenter.helloWorld",
+          "command": "ai-commenter.comment",
           "group": "9_cutcopypaste"
         }
       ]
