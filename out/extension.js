@@ -22,12 +22,21 @@ function activate(context) {
             return;
         }
         const document = editor.document;
+        const headers = {
+            'Content-Type': 'application/json'
+        };
         let code = document.getText();
         code = code.split(/[\s]+/).join(' ').toLowerCase();
-        axios_1.default.post("", { code: code }, { headers: { "Content-Type": "application/json" } }).then(function (response) {
-            vscode.window.showInformationMessage(code);
+        axios_1.default.post(String(url), { code: code }, {
+            headers: headers
+        })
+            .then(function (response) {
+            if (editor) {
+                editor.edit(
+                //Todo: Injector function
+                () => { });
+            }
         });
-        vscode.window.showInformationMessage(code);
     });
     context.subscriptions.push(disposable);
 }

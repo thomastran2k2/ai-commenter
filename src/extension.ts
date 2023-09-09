@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import axios from 'axios';
+import { PassThrough } from 'stream';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -24,17 +25,25 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const document = editor.document;
-		
+		const headers = {
+			
+			'Content-Type': 'application/json'
+		};
 
 		let code = document.getText();
 		code = code.split(/[\s]+/).join(' ').toLowerCase();
-		axios.post("", {code: code}, {headers: {"Content-Type": "application/json"}}).then(
-			function(response){
-				vscode.window.showInformationMessage(code)
-			}
-		)
-		vscode.window.showInformationMessage(code)
+		axios.post(String(url), { code: code }, {
+			headers: headers
+		})
+			.then(function (response) {
 
+				if (editor) {
+					editor.edit(
+						//Todo: Injector function
+						() => {}
+					);
+				}
+			});
 		
 	});
 
