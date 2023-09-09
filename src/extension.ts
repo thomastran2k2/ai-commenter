@@ -32,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const url = "" //api address;
 		let code = document.getText();
 		code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
+		
 		axios.post(String(url), { code: code }, {
 			headers: headers
 		})
