@@ -27,34 +27,31 @@ export function activate(context: vscode.ExtensionContext) {
 		sampleParseFunc('/home/will/MACathon/src')
 		
 		
+		const editor = vscode.window.activeTextEditor;
+		if (!editor){
+			return;
+		}
 
-		// REST client code need to be commented out now in order for the parser to work (preventin premature exit)
-
-		// const editor = vscode.window.activeTextEditor;
-		// if (!editor){
-		// 	return;
-		// }
-
-		// const document = editor.document;
-		// const headers = {
+		const document = editor.document;
+		const headers = {
 			
-		// 	'Content-Type': 'application/json'
-		// };
-		// const url = "" //api address;
-		// let code = document.getText();
-		// code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-		// axios.post(String(url), { code: code }, {
-		// 	headers: headers
-		// })
-		// 	.then(function (response) {
+			'Content-Type': 'application/json'
+		};
+		const url = "" //api address;
+		let code = document.getText();
+		code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
+		axios.post(String(url), { code: code }, {
+			headers: headers
+		})
+			.then(function (response) {
 
-		// 		if (editor) {
-		// 			editor.edit(
-		// 				//Todo: Injector function
-		// 				() => {}
-		// 			);
-		// 		}
-		// 	});
+				if (editor) {
+					editor.edit(
+						//Todo: Injector function
+						() => {}
+					);
+				}
+			});
 		
 	});
 

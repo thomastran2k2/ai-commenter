@@ -4,6 +4,7 @@ exports.deactivate = exports.activate = void 0;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
+const axios_1 = require("axios");
 const parser_1 = require("./parser");
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -19,29 +20,27 @@ function activate(context) {
         // Display a message box to the user
         // sample code for Parser, to be removed after prod, change the project path to the correct one on your machine
         sampleParseFunc('/home/will/MACathon/src');
-        // REST client code need to be commented out now in order for the parser to work (preventin premature exit)
-        // const editor = vscode.window.activeTextEditor;
-        // if (!editor){
-        // 	return;
-        // }
-        // const document = editor.document;
-        // const headers = {
-        // 	'Content-Type': 'application/json'
-        // };
-        // const url = "" //api address;
-        // let code = document.getText();
-        // code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-        // axios.post(String(url), { code: code }, {
-        // 	headers: headers
-        // })
-        // 	.then(function (response) {
-        // 		if (editor) {
-        // 			editor.edit(
-        // 				//Todo: Injector function
-        // 				() => {}
-        // 			);
-        // 		}
-        // 	});
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const url = ""; //api address;
+        let code = document.getText();
+        code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
+        axios_1.default.post(String(url), { code: code }, {
+            headers: headers
+        })
+            .then(function (response) {
+            if (editor) {
+                editor.edit(
+                //Todo: Injector function
+                () => { });
+            }
+        });
     });
     context.subscriptions.push(disposable);
 }
