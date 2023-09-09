@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "ai-commenter.helloWorld",
+        "command": "ai-commenter.start",
         "title": "AI Code Commenter"
       }
     ],
@@ -22,7 +22,7 @@
       "editor/context": [
         {
           "when": "editorHasSelection",
-          "command": "ai-commenter.comment",
+          "command": "ai-commenter.start",
           "group": "9_cutcopypaste"
         }
       ]
@@ -49,6 +49,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "axios": "^1.5.0"
+    "axios": "^1.5.0",
+    "ts-node": "^10.9.1"
   }
 }
