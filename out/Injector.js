@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Injector = void 0;
 class Injector {
-    constructor(response, editor, text, selection) {
+    constructor(response, editor, selection) {
         this.MSG = 'AUTO-GENERATED COMMENT PLEASE VERIFY AND UPDATE';
         this.editor = editor;
         this.response = response;
-        this.text = text;
         this.selection = selection;
     }
     genMethodComment(cmt, paramNames, isVoid, alignChars) {

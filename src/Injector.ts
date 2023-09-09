@@ -2,18 +2,19 @@ import * as vscode from 'vscode';
 export class Injector {
     response: any;
     editor: vscode.TextEditor;
-    text: string;
+
     selection: vscode.Selection;
     constructor(
         response: JSON,
         editor: vscode.TextEditor,
-        text: string,
-        selection: vscode.Selection
+        selection: vscode.Selection,
+
+        
     ){ 
-        this.editor = editor
-        this.response = response
-        this.text = text
-        this.selection = selection}
+        this.editor = editor;
+        this.response = response;
+     
+        this.selection = selection;}
     
     
     private MSG = 'AUTO-GENERATED COMMENT PLEASE VERIFY AND UPDATE';
@@ -52,7 +53,7 @@ export class Injector {
                 // } else {
                 //     cmt = genInlineComment(response.data, alignChars);
                 // }
-                cmt = this.genInlineComment(this.response.data, alignChars)
+                cmt = this.genInlineComment(this.response.data, alignChars);
                 editBuilder.insert(this.selection.start, cmt + ' '.repeat(this.selection.start.character));
             });
         }
