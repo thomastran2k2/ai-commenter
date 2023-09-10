@@ -5,7 +5,7 @@ import axios from 'axios';
 import { ParsedEntity, Parser } from './parser';
 import path = require('path');
 import { privateEncrypt } from 'crypto';
-
+import { Injector } from './Injector';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 		
 
 		// sample code for Parser, to be removed after prod, change the project path to the correct one on your machine
-		sampleParseFunc('/home/will/MACathon/src')
+		sampleParseFunc('/home/will/MACathon/src');
 		
 		
 		const editor = vscode.window.activeTextEditor;
@@ -33,25 +33,23 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const document = editor.document;
+		const selection = editor.selection;
 		const headers = {
 			
 			'Content-Type': 'application/json'
 		};
-		const url = "" //api address;
+		const url = ""; //api address;
 		let code = document.getText();
 		code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-		
+		let response = " "
+		let injector = new Injector(response, editor, selection );
+				injector.inject(); 
 		axios.post(String(url), { code: code }, {
 			headers: headers
 		})
 			.then(function (response) {
-
-				if (editor) {
-					editor.edit(
-						//Todo: Injector function
-						() => {}
-					);
-				}
+				
+			
 			});
 		
 	});
@@ -61,9 +59,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 async function sampleParseFunc(projectPath: string) {
-	var parser: any = new Parser(vscode.Uri.parse(projectPath))
-	let res = await parser.parse()
-	console.log(res)
+	var parser: any = new Parser(vscode.Uri.parse(projectPath));
+	let res = await parser.parse();
+	console.log(res);
 }
 // This method is called when your extension is deactivated
 export function deactivate() {}
