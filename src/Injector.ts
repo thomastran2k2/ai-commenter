@@ -14,7 +14,8 @@ export class Injector {
         this.editor = editor;
         this.response = response;
      
-        this.selection = selection;}
+        this.selection = selection;
+    }
     
     
     // private MSG = 'AUTO-GENERATED COMMENT PLEASE VERIFY AND UPDATE';

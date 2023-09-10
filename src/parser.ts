@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as ts from 'typescript';
+import internal = require('stream');
 
 /*
     Todo: 
@@ -13,6 +14,9 @@ export interface ParsedEntity {
     type: string; // the type of the entity: Class of Object
     name: string; // the class name of function name
     code: string; // the code of the entity (a.k.a the entire class of function as a string)
+    startLine: number; // the line number where the function is declared
+    startColumn: number; // the col number where the function is declared
+    
 }
 
 export class Parser {
@@ -73,35 +77,42 @@ export class Parser {
     // Basically compiles the file and get the child nodes that are class of function
     private parseFunctionsAndClasses(code: string): ParsedEntity[] {
         const functionsAndClasses: ParsedEntity[] = [];
-      
+
         try {
-          const sourceFile = ts.createSourceFile('code.ts', code, ts.ScriptTarget.Latest, true);
-      
-          function visitNode(node: ts.Node) {
+            const sourceFile = ts.createSourceFile('code.ts', code, ts.ScriptTarget.Latest, true);
+
+            function visitNode(node: ts.Node) {
             if (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) {
-              const type = ts.isFunctionDeclaration(node) ? 'Function' : 'Class';
-              const name = (node.name && node.name.text) || 'Anonymous';
-      
-              const start = node.getStart(sourceFile);
-              const end = node.getEnd();
-      
-              const functionOrClassCode = code.substring(start, end);
-      
-              functionsAndClasses.push({
+                const type = ts.isFunctionDeclaration(node) ? 'Function' : 'Class';
+                const name = (node.name && node.name.text) || 'Anonymous';
+
+                const start = node.getStart(sourceFile);
+                const end = node.getEnd();
+
+                const functionOrClassCode = code.substring(start, end);
+
+                // Calculate line and column numbers based on the start position
+                const startLineAndCharacter = ts.getLineAndCharacterOfPosition(sourceFile, start);
+                const startLine = startLineAndCharacter.line + 1; // Lines are 0-based
+                const startColumn = startLineAndCharacter.character + 1; // Columns are 0-based
+
+                functionsAndClasses.push({
                 type,
                 name,
                 code: functionOrClassCode,
-              });
+                startLine,
+                startColumn,
+                });
             }
-      
+
             ts.forEachChild(node, visitNode);
-          }
-      
-          visitNode(sourceFile);
+            }
+
+            visitNode(sourceFile);
         } catch (error) {
-          console.error(`Error parsing code: ${error}`);
+            console.error(`Error parsing code: ${error}`);
         }
-      
+
         return functionsAndClasses;
-      }
+    }
 }
