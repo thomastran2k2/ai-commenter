@@ -41,15 +41,15 @@ export function activate(context: vscode.ExtensionContext) {
 		const url = ""; //api address;
 		let code = document.getText();
 		code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-		let response = " "
-		let injector = new Injector(response, editor, selection );
-				injector.inject(); 
+		
+		
+				 
 		axios.post(String(url), { code: code }, {
 			headers: headers
 		})
 			.then(function (response) {
-				
-			
+				let injector = new Injector(response, editor, selection );
+				injector.inject();
 			});
 		
 	});
