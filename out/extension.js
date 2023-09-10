@@ -20,7 +20,7 @@ function activate(context) {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
         // sample code for Parser, to be removed after prod, change the project path to the correct one on your machine
-        sampleParseFunc('/home/will/MACathon/src');
+        // sampleParseFunc('/home/will/MACathon/src');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -30,17 +30,19 @@ function activate(context) {
         const headers = {
             'Content-Type': 'application/json'
         };
-        const url = ""; //api address;
-        let code = document.getText();
-        code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-        let response = " ";
-        let injector = new Injector_1.Injector(response, editor, selection);
-        injector.inject();
+        const url = "http://localhost:5000/home"; //api address;
+        let code = document.getText(selection);
+        //Basic parser
+        console.log(code);
         axios_1.default.post(String(url), { code: code }, {
             headers: headers
         })
             .then(function (response) {
-        });
+            console.log(response);
+            let injector = new Injector_1.Injector(response.data, editor, selection);
+            injector.inject(response.data);
+        })
+            .catch(error => console.log(error));
     });
     context.subscriptions.push(disposable);
 }

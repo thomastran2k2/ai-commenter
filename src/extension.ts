@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 		
 
 		// sample code for Parser, to be removed after prod, change the project path to the correct one on your machine
-		sampleParseFunc('/home/will/MACathon/src');
+		// sampleParseFunc('/home/will/MACathon/src');
 		
 		
 		const editor = vscode.window.activeTextEditor;
@@ -38,19 +38,21 @@ export function activate(context: vscode.ExtensionContext) {
 			
 			'Content-Type': 'application/json'
 		};
-		const url = ""; //api address;
-		let code = document.getText();
-		code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
-		
+		const url = "http://localhost:5000/home"; //api address;
+		let code = document.getText(selection);
+		 //Basic parser
+		console.log(code)
 		
 				 
 		axios.post(String(url), { code: code }, {
 			headers: headers
 		})
 			.then(function (response) {
-				let injector = new Injector(response, editor, selection );
-				injector.inject();
-			});
+				console.log(response)
+				let injector = new Injector(response.data, editor, selection );
+				injector.inject(response.data);
+			})
+			.catch(error => console.log(error));
 		
 	});
 
