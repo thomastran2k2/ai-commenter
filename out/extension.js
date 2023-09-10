@@ -6,6 +6,7 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
 const parser_1 = require("./parser");
+const Injector_1 = require("./Injector");
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -25,21 +26,20 @@ function activate(context) {
             return;
         }
         const document = editor.document;
+        const selection = editor.selection;
         const headers = {
             'Content-Type': 'application/json'
         };
         const url = ""; //api address;
         let code = document.getText();
         code = code.split(/[\s]+/).join(' ').toLowerCase(); //Basic parser
+        let response = " ";
+        let injector = new Injector_1.Injector(response, editor, selection);
+        injector.inject();
         axios_1.default.post(String(url), { code: code }, {
             headers: headers
         })
             .then(function (response) {
-            if (editor) {
-                editor.edit(
-                //Todo: Injector function
-                () => { });
-            }
         });
     });
     context.subscriptions.push(disposable);
